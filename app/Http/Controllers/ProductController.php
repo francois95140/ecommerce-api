@@ -25,7 +25,7 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function create(Request $request)
+    public function store(Request $request)
     {
         try {
             $validatedData = $request->validate([
@@ -33,6 +33,7 @@ class ProductController extends Controller
                 'description' => 'required|string',
                 'price' => 'required|numeric|min:1',
                 'stock' => 'required|integer|min:1',
+                'image' => 'required|url',
             ]);
 
             $product = Product::create($validatedData);
@@ -84,6 +85,8 @@ class ProductController extends Controller
                     'description' => 'nullable|string',
                     'price' => 'nullable|numeric|min:1',
                     'stock' => 'nullable|integer|min:1',
+                    'image' => 'nullable|url',
+
                 ], [
                     'price.numeric' => 'The price must be a valid number.',
                     'stock.integer' => 'The stock must be a valid integer.',
@@ -101,7 +104,7 @@ class ProductController extends Controller
                     'message' => 'Validation failed',
                     'errors' => $e->errors()
                 ], 422);
-            }        
+            }
         }
     }
 
@@ -117,6 +120,6 @@ class ProductController extends Controller
             $product->delete();
             return response()->json(['message' => 'Product deleted successfully'], 200);
         }
-        
+
     }
 }
